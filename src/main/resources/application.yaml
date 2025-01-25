@@ -1,0 +1,6 @@
+server:
+  servlet:
+    context-path: /api/upload
+spring:
+  profiles:
+    active: dev
