@@ -21,7 +21,7 @@ data class VideoUploadEntity(
     val title: String,
 
     @Column(name = "url_video")
-    val urlVideo: String,
+    val urlVideo: String? = null,
 
     @Column(name = "url_zip_image")
     val urlZipImages: String? = null,

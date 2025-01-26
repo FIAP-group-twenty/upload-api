@@ -17,8 +17,8 @@ class UploadVideoGateway(
             idUser = upload.idUser,
             title = upload.title,
             urlVideo = upload.urlVideo,
-            urlZipImages = "null",
-            status = "pendente",
+            urlZipImages = null,
+            status = upload.status,
             createdAt = LocalDateTime.now(),
             updatedAt = LocalDateTime.now()
         )

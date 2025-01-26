@@ -4,5 +4,5 @@ data class VideoUpload(
     val idUser: Long,
     val status: String,
     val title: String,
-    val urlVideo: String,
+    val urlVideo: String? = null,
 )

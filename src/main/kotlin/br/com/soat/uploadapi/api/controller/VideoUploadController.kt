@@ -16,13 +16,7 @@ class VideoUploadController(
         @RequestParam("userId") userId: Long,
         @RequestParam("file") file: MultipartFile
     ): ResponseEntity<String> {
-        val fileName = file.originalFilename ?: "$userId"
-        val content = file.contentType ?: "application/octet-stream"
-
-        file.inputStream.use {
-            uploadVideoUseCase.execute(userId, fileName, it, content)
-            return ResponseEntity.ok("File uploaded")
-        }
+        uploadVideoUseCase.execute(userId, file)
+        return ResponseEntity.accepted().body("File uploaded")
     }
-
 }
