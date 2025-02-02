@@ -1,8 +1,8 @@
 package br.com.soat.uploadapi.core.entities
 
-data class VideoUpload(
+data class VideoUpdated(
     val email: String,
     val status: String,
     val title: String,
-    val urlVideo: String? = null,
+    val urlImages: String? = null,
 )

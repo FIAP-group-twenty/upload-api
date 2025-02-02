@@ -14,7 +14,7 @@ class UploadVideoGateway(
 
     override fun uploadVideo(upload: VideoUpload) {
         val entity =   VideoUploadEntity(
-            idUser = upload.idUser,
+            email = upload.email,
             title = upload.title,
             urlVideo = upload.urlVideo,
             urlZipImages = null,
@@ -27,4 +27,11 @@ class UploadVideoGateway(
         )
     }
 
+    override fun findByEmailAndTitle(email: String, title: String): VideoUploadEntity? {
+        return videoUploadDataSource.findByEmailAndTitle(email, title)
+    }
+
+    override fun updatedVideo(updated: VideoUploadEntity) {
+        videoUploadDataSource.save(updated)
+    }
 }
