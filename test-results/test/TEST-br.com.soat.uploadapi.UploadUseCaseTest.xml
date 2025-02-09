@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="br.com.soat.uploadapi.UploadUseCaseTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2025-02-09T23:26:44" hostname="lucas-Dell-G15-5510" time="3.973">
+  <properties/>
+  <testcase name="Deve lançar exception ao tentar subir um video que o usuario ja subiu" classname="br.com.soat.uploadapi.UploadUseCaseTest" time="3.763"/>
+  <testcase name="Deve subir video para processamento" classname="br.com.soat.uploadapi.UploadUseCaseTest" time="0.21"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

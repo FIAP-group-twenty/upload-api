@@ -1,6 +1,6 @@
 package br.com.soat.uploadapi.api.exception
 
-import br.com.soat.uploadapi.core.IntegrationErrorException
+import br.com.soat.uploadapi.core.exceptions.IntegrationErrorException
 import br.com.soat.uploadapi.core.entities.ExceptionResponse
 import br.com.soat.uploadapi.core.exceptions.ConflictException
 import br.com.soat.uploadapi.core.exceptions.NotFoundException

@@ -12,7 +12,7 @@ import org.springframework.web.multipart.MultipartFile
 
 @RestController
 @RequestMapping("/videos")
-class VideoUploadController(
+class VideoController(
     private val uploadVideoUseCase: UploadVideoUseCase,
     private val jwtUtil: JwtUtil,
     private val findStatusVideoByUserUseCase: FindStatusVideoByUserUseCase,

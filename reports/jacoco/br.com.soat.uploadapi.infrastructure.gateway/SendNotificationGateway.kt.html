@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SendNotificationGateway.kt</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">upload-api</a> &gt; <a href="index.source.html" class="el_package">br.com.soat.uploadapi.infrastructure.gateway</a> &gt; <span class="el_source">SendNotificationGateway.kt</span></div><h1>SendNotificationGateway.kt</h1><pre class="source lang-java linenums">package br.com.soat.uploadapi.infrastructure.gateway
+
+import br.com.soat.uploadapi.core.exceptions.IntegrationErrorException
+import br.com.soat.uploadapi.core.gateways.ISendNotificationGateway
+import br.com.soat.uploadapi.infrastructure.gateway.model.NotificationRequest
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.beans.factory.annotation.Value
+import org.springframework.stereotype.Component
+import org.springframework.web.client.RestTemplate
+
+<span class="nc" id="L11">@Component</span>
+<span class="nc" id="L12">class SendNotificationGateway(</span>
+<span class="nc" id="L13">    @Autowired private val restTemplate: RestTemplate,</span>
+<span class="nc" id="L14">    @Value(&quot;\${integrations.baseUrl}&quot;) private val baseUrl: String,</span>
+) : ISendNotificationGateway {
+
+    override fun execute(notificationRequest: NotificationRequest) {
+<span class="nc" id="L18">        try {</span>
+<span class="nc" id="L19">            val url = &quot;$baseUrl/api/notifications/v1/send&quot;</span>
+<span class="nc" id="L20">            restTemplate.postForObject(url, notificationRequest, String::class.java)</span>
+<span class="nc" id="L21">        }catch (e: Exception) {</span>
+<span class="nc" id="L22">            throw IntegrationErrorException(&quot;Sending notification request failed&quot;)</span>
+        }
+<span class="nc" id="L24">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

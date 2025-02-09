@@ -7,16 +7,20 @@ import br.com.soat.uploadapi.core.usecase.FindStatusVideoByUserUseCase
 import br.com.soat.uploadapi.core.usecase.UpdateVideoUseCase
 import br.com.soat.uploadapi.core.usecase.UploadVideoUseCase
 import io.awspring.cloud.sqs.operations.SqsTemplate
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import software.amazon.awssdk.services.s3.S3Client
+import software.amazon.awssdk.services.s3.presigner.S3Presigner
 
 @Configuration
 class BeanConfiguration(
     private val videoGateway: IVideoUploadGateway,
     private val s3Client: S3Client,
     private val sqsTemplate: SqsTemplate,
-    private val sendNotificationGateway: ISendNotificationGateway
+    private val sendNotificationGateway: ISendNotificationGateway,
+    @Value(value = "\${aws.bucketName}") private var bucketName: String,
+    private val presigner: S3Presigner
 ) {
 
     @Bean
@@ -36,6 +40,6 @@ class BeanConfiguration(
 
     @Bean
     fun downloadImagesUseCase(): DownloadImagesUseCase {
-        return DownloadImagesUseCase(videoGateway)
+        return DownloadImagesUseCase(videoGateway, bucketName, presigner)
     }
 }

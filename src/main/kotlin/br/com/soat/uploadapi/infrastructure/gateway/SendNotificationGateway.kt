@@ -1,6 +1,6 @@
 package br.com.soat.uploadapi.infrastructure.gateway
 
-import br.com.soat.uploadapi.core.IntegrationErrorException
+import br.com.soat.uploadapi.core.exceptions.IntegrationErrorException
 import br.com.soat.uploadapi.core.gateways.ISendNotificationGateway
 import br.com.soat.uploadapi.infrastructure.gateway.model.NotificationRequest
 import org.springframework.beans.factory.annotation.Autowired

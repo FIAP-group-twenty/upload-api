@@ -9,18 +9,15 @@ import software.amazon.awssdk.services.s3.presigner.model.GetObjectPresignReques
 import java.time.Duration
 
 class DownloadImagesUseCase(
-    private val videoGateway: IVideoUploadGateway
+    private val videoGateway: IVideoUploadGateway,
+    @Value(value = "\${aws.bucketName}") private var bucketName: String,
+    private val s3Presigner: S3Presigner
 ) {
 
-    @Value(value = "\${aws.bucketName}")
-    private lateinit var bucketName: String
 
     fun execute(email: String, fileName: String): String {
         videoGateway.findByEmailAndTitle(email, fileName)
             ?: throw NotFoundException("File not found: $fileName")
-
-        val presigner = S3Presigner.create()
-
 
         val request = GetObjectRequest.builder()
             .bucket(bucketName)
@@ -32,9 +29,8 @@ class DownloadImagesUseCase(
             .getObjectRequest(request)
             .build()
 
-        val presignedUrl = presigner.presignGetObject(presignRequest)
-        presigner.close()
-
+        val presignedUrl = s3Presigner.presignGetObject(presignRequest)
+        s3Presigner.close()
         return presignedUrl.url().toString()
     }
 }
