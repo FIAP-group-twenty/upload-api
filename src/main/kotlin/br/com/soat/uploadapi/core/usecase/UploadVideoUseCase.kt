@@ -2,6 +2,8 @@ package br.com.soat.uploadapi.core.usecase
 
 import br.com.soat.uploadapi.core.entities.VideoUpload
 import br.com.soat.uploadapi.core.entities.VideoUploadStatus
+import br.com.soat.uploadapi.core.exceptions.ConflictException
+import br.com.soat.uploadapi.core.exceptions.NotFoundException
 import br.com.soat.uploadapi.core.gateways.IVideoUploadGateway
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.awspring.cloud.sqs.operations.SqsTemplate
@@ -41,6 +43,9 @@ class UploadVideoUseCase(
         val fileName = file.originalFilename ?: email
         val contentType = file.contentType ?: "application/octet-stream"
 
+        val existsFileByUser = videoUploadGateway.findByEmailAndTitle(email, fileName)
+        if (existsFileByUser != null) throw ConflictException("File already exists")
+
         val videoUpload = VideoUpload(
             email = email,
             status = VideoUploadStatus.STARTED.name,
@@ -74,7 +79,7 @@ class UploadVideoUseCase(
         val putObjectRequest = PutObjectRequest.builder()
             .bucket(bucketName)
             .key(fileName)
-            .metadata(mapOf("Content-type" to contentType))  // Passando os metadados
+            .metadata(mapOf("Content-type" to contentType))
             .build()
 
         s3Client.putObject(putObjectRequest, RequestBody.fromInputStream(file, file.available().toLong()))
@@ -91,7 +96,7 @@ class UploadVideoUseCase(
 
 
         val findVideo = videoUploadGateway.findByEmailAndTitle(email, fileName)
-            ?: throw RuntimeException("Video does not exists")
+            ?: throw NotFoundException("file does not exists")
         findVideo.urlVideo = videoUrl
         findVideo.updatedAt = LocalDateTime.now()
         findVideo.status = VideoUploadStatus.IN_PROCESSING.name

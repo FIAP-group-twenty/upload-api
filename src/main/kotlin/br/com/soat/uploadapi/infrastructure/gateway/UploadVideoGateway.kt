@@ -34,4 +34,8 @@ class UploadVideoGateway(
     override fun updatedVideo(updated: VideoUploadEntity) {
         videoUploadDataSource.save(updated)
     }
+
+    override fun findStatusVideoByUser(email: String): List<VideoUploadEntity?> {
+        return videoUploadDataSource.findByEmail(email)
+    }
 }

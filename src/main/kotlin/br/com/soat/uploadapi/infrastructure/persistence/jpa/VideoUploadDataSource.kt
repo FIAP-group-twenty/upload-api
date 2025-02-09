@@ -9,4 +9,6 @@ interface VideoUploadDataSource : JpaRepository<VideoUploadEntity, Long> {
         value = "select * from tb_video_upload where email = :email and title = :title",
         nativeQuery = true)
     fun findByEmailAndTitle(email: String, title: String): VideoUploadEntity?
+
+    fun findByEmail(email: String): List<VideoUploadEntity>
 }

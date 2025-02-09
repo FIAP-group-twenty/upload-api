@@ -1,6 +1,9 @@
 package br.com.soat.uploadapi.api.config
 
+import br.com.soat.uploadapi.core.gateways.ISendNotificationGateway
 import br.com.soat.uploadapi.core.gateways.IVideoUploadGateway
+import br.com.soat.uploadapi.core.usecase.DownloadImagesUseCase
+import br.com.soat.uploadapi.core.usecase.FindStatusVideoByUserUseCase
 import br.com.soat.uploadapi.core.usecase.UpdateVideoUseCase
 import br.com.soat.uploadapi.core.usecase.UploadVideoUseCase
 import io.awspring.cloud.sqs.operations.SqsTemplate
@@ -12,7 +15,8 @@ import software.amazon.awssdk.services.s3.S3Client
 class BeanConfiguration(
     private val videoGateway: IVideoUploadGateway,
     private val s3Client: S3Client,
-    private val sqsTemplate: SqsTemplate
+    private val sqsTemplate: SqsTemplate,
+    private val sendNotificationGateway: ISendNotificationGateway
 ) {
 
     @Bean
@@ -22,6 +26,16 @@ class BeanConfiguration(
 
     @Bean
     fun updateVideoUseCase(): UpdateVideoUseCase {
-        return UpdateVideoUseCase(videoGateway)
+        return UpdateVideoUseCase(videoGateway, sendNotificationGateway)
+    }
+
+    @Bean
+    fun findStatusVideoByUserUseCase(): FindStatusVideoByUserUseCase {
+        return FindStatusVideoByUserUseCase(videoGateway)
+    }
+
+    @Bean
+    fun downloadImagesUseCase(): DownloadImagesUseCase {
+        return DownloadImagesUseCase(videoGateway)
     }
 }
