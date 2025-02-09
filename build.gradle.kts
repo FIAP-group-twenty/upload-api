@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 plugins {
     kotlin("jvm") version "1.9.25"
     kotlin("plugin.spring") version "1.9.25"
@@ -68,13 +70,9 @@ allOpen {
     annotation("jakarta.persistence.Embeddable")
 }
 
-tasks.test {
-    useJUnitPlatform()
-}
-
 sonarqube {
     properties {
-        property ("sonar.projectKey", "group-twenty_notification-service")
+        property ("sonar.projectKey", "group-twenty_upload-api")
         property ("sonar.organization", "group-twenty")
         property ("sonar.host.url", project.findProperty("SONAR_HOST_URL") ?: "")
         property("sonar.login", project.findProperty("SONAR_TOKEN") ?: "")
@@ -84,6 +82,16 @@ sonarqube {
     }
 }
 
+tasks.withType<KotlinCompile> {
+    kotlinOptions {
+        freeCompilerArgs += "-Xjsr305=strict"
+        jvmTarget = JavaVersion.VERSION_17.toString()
+    }
+}
+
+tasks.test {
+    useJUnitPlatform()
+}
 
 tasks.test {
     useJUnitPlatform()
