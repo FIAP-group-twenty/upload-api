@@ -1,8 +1,7 @@
-package br.com.soat.uploadapi
+package br.com.soat.uploadapi.core.usecase
 
 import br.com.soat.uploadapi.core.exceptions.NotFoundException
 import br.com.soat.uploadapi.core.gateways.IVideoUploadGateway
-import br.com.soat.uploadapi.core.usecase.DownloadImagesUseCase
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.slot

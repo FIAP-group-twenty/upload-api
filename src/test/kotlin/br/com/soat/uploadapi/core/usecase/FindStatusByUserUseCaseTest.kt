@@ -1,7 +1,6 @@
-package br.com.soat.uploadapi
+package br.com.soat.uploadapi.core.usecase
 
 import br.com.soat.uploadapi.core.gateways.IVideoUploadGateway
-import br.com.soat.uploadapi.core.usecase.FindStatusVideoByUserUseCase
 import br.com.soat.uploadapi.infrastructure.persistence.enitites.VideoUploadEntity
 import io.mockk.every
 import io.mockk.mockk

@@ -22,14 +22,10 @@ import java.time.LocalDateTime
 class UploadVideoUseCase(
     private val s3Client: S3Client,
     private val videoUploadGateway: IVideoUploadGateway,
-    private val sqsTemplate: SqsTemplate
+    private val sqsTemplate: SqsTemplate,
+    @Value(value = "\${aws.bucketName}") private var bucketName: String,
+    @Value("\${aws.sqs.queue-upload}") private var queue: String
 ) {
-
-    @Value(value = "\${aws.bucketName}")
-    private lateinit var bucketName: String
-
-    @Value("\${aws.sqs.queue-upload}")
-    private lateinit var queue: String
 
     companion object {
         private val objectMapper = ObjectMapper()
@@ -68,7 +64,7 @@ class UploadVideoUseCase(
 
     }
 
-    private fun uploadedVideo(
+    fun uploadedVideo(
         email: String,
         fileName: String,
         file: InputStream,
