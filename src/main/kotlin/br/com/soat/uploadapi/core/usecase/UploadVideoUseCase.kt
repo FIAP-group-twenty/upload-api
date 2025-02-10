@@ -4,7 +4,7 @@ import br.com.soat.uploadapi.core.entities.VideoUpload
 import br.com.soat.uploadapi.core.entities.VideoUploadStatus
 import br.com.soat.uploadapi.core.exceptions.ConflictException
 import br.com.soat.uploadapi.core.exceptions.NotFoundException
-import br.com.soat.uploadapi.core.gateways.IVideoUploadGateway
+import br.com.soat.uploadapi.core.gateways.IVideoGateway
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.awspring.cloud.sqs.operations.SqsTemplate
 import kotlinx.coroutines.CoroutineScope
@@ -21,7 +21,7 @@ import java.time.LocalDateTime
 
 class UploadVideoUseCase(
     private val s3Client: S3Client,
-    private val videoUploadGateway: IVideoUploadGateway,
+    private val videoUploadGateway: IVideoGateway,
     private val sqsTemplate: SqsTemplate,
     @Value(value = "\${aws.bucketName}") private var bucketName: String,
     @Value("\${aws.sqs.queue-upload}") private var queue: String

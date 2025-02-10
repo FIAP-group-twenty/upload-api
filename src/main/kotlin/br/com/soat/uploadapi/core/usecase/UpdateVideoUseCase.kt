@@ -3,14 +3,14 @@ package br.com.soat.uploadapi.core.usecase
 import br.com.soat.uploadapi.core.entities.VideoUpdated
 import br.com.soat.uploadapi.core.exceptions.NotFoundException
 import br.com.soat.uploadapi.core.gateways.ISendNotificationGateway
-import br.com.soat.uploadapi.core.gateways.IVideoUploadGateway
+import br.com.soat.uploadapi.core.gateways.IVideoGateway
 import br.com.soat.uploadapi.infrastructure.gateway.model.NotificationRequest
 import io.awspring.cloud.sqs.annotation.SqsListener
 import org.springframework.beans.factory.annotation.Value
 
 
 class UpdateVideoUseCase(
-    private val videoUploadGateway: IVideoUploadGateway,
+    private val videoUploadGateway: IVideoGateway,
     private val sendNotification: ISendNotificationGateway,
 ) {
 

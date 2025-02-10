@@ -1,16 +1,16 @@
 package br.com.soat.uploadapi.infrastructure.gateway
 
 import br.com.soat.uploadapi.core.entities.VideoUpload
-import br.com.soat.uploadapi.core.gateways.IVideoUploadGateway
+import br.com.soat.uploadapi.core.gateways.IVideoGateway
 import br.com.soat.uploadapi.infrastructure.persistence.enitites.VideoUploadEntity
 import br.com.soat.uploadapi.infrastructure.persistence.jpa.VideoUploadDataSource
 import org.springframework.stereotype.Repository
 import java.time.LocalDateTime
 
 @Repository
-class UploadVideoGateway(
+class VideoGateway(
     private val videoUploadDataSource: VideoUploadDataSource,
-) : IVideoUploadGateway{
+) : IVideoGateway{
 
     override fun uploadVideo(upload: VideoUpload) {
         val entity =   VideoUploadEntity(

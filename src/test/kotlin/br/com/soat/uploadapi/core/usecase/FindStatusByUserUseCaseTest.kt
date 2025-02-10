@@ -1,6 +1,6 @@
 package br.com.soat.uploadapi.core.usecase
 
-import br.com.soat.uploadapi.core.gateways.IVideoUploadGateway
+import br.com.soat.uploadapi.core.gateways.IVideoGateway
 import br.com.soat.uploadapi.infrastructure.persistence.enitites.VideoUploadEntity
 import io.mockk.every
 import io.mockk.mockk
@@ -14,7 +14,7 @@ import java.time.LocalDateTime
 class FindStatusByUserUseCaseTest {
 
     private lateinit var findStatusVideoByUserUseCase: FindStatusVideoByUserUseCase
-    private lateinit var videoUploadGateway: IVideoUploadGateway
+    private lateinit var videoUploadGateway: IVideoGateway
 
     @BeforeEach
     fun setup(){

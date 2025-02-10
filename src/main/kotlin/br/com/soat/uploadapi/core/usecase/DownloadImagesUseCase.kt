@@ -1,7 +1,7 @@
 package br.com.soat.uploadapi.core.usecase
 
 import br.com.soat.uploadapi.core.exceptions.NotFoundException
-import br.com.soat.uploadapi.core.gateways.IVideoUploadGateway
+import br.com.soat.uploadapi.core.gateways.IVideoGateway
 import org.springframework.beans.factory.annotation.Value
 import software.amazon.awssdk.services.s3.model.GetObjectRequest
 import software.amazon.awssdk.services.s3.presigner.S3Presigner
@@ -9,7 +9,7 @@ import software.amazon.awssdk.services.s3.presigner.model.GetObjectPresignReques
 import java.time.Duration
 
 class DownloadImagesUseCase(
-    private val videoGateway: IVideoUploadGateway,
+    private val videoGateway: IVideoGateway,
     @Value(value = "\${aws.bucketName}") private var bucketName: String,
     private val s3Presigner: S3Presigner
 ) {

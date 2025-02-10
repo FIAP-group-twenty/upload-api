@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>BeanConfiguration.kt</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">upload-api</a> &gt; <a href="index.source.html" class="el_package">br.com.soat.uploadapi.api.config</a> &gt; <span class="el_source">BeanConfiguration.kt</span></div><h1>BeanConfiguration.kt</h1><pre class="source lang-java linenums">package br.com.soat.uploadapi.api.config
 
 import br.com.soat.uploadapi.core.gateways.ISendNotificationGateway
-import br.com.soat.uploadapi.core.gateways.IVideoUploadGateway
+import br.com.soat.uploadapi.core.gateways.IVideoGateway
 import br.com.soat.uploadapi.core.usecase.DownloadImagesUseCase
 import br.com.soat.uploadapi.core.usecase.FindStatusVideoByUserUseCase
 import br.com.soat.uploadapi.core.usecase.UpdateVideoUseCase
@@ -15,7 +15,7 @@ import software.amazon.awssdk.services.s3.presigner.S3Presigner
 
 <span class="nc" id="L16">@Configuration</span>
 <span class="nc" id="L17">class BeanConfiguration(</span>
-<span class="nc" id="L18">    private val videoGateway: IVideoUploadGateway,</span>
+<span class="nc" id="L18">    private val videoGateway: IVideoGateway,</span>
 <span class="nc" id="L19">    private val s3Client: S3Client,</span>
 <span class="nc" id="L20">    private val sqsTemplate: SqsTemplate,</span>
 <span class="nc" id="L21">    private val sendNotificationGateway: ISendNotificationGateway,</span>

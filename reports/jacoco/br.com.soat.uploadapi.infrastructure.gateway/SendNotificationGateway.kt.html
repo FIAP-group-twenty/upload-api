@@ -8,20 +8,20 @@ import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
 import org.springframework.web.client.RestTemplate
 
-<span class="nc" id="L11">@Component</span>
-<span class="nc" id="L12">class SendNotificationGateway(</span>
-<span class="nc" id="L13">    @Autowired private val restTemplate: RestTemplate,</span>
-<span class="nc" id="L14">    @Value(&quot;\${integrations.baseUrl}&quot;) private val baseUrl: String,</span>
+<span class="fc" id="L11">@Component</span>
+<span class="fc" id="L12">class SendNotificationGateway(</span>
+<span class="fc" id="L13">    @Autowired private val restTemplate: RestTemplate,</span>
+<span class="fc" id="L14">    @Value(&quot;\${integrations.baseUrl}&quot;) private val baseUrl: String,</span>
 ) : ISendNotificationGateway {
 
     override fun execute(notificationRequest: NotificationRequest) {
-<span class="nc" id="L18">        try {</span>
-<span class="nc" id="L19">            val url = &quot;$baseUrl/api/notifications/v1/send&quot;</span>
-<span class="nc" id="L20">            restTemplate.postForObject(url, notificationRequest, String::class.java)</span>
-<span class="nc" id="L21">        }catch (e: Exception) {</span>
-<span class="nc" id="L22">            throw IntegrationErrorException(&quot;Sending notification request failed&quot;)</span>
+<span class="fc" id="L18">        try {</span>
+<span class="fc" id="L19">            val url = &quot;$baseUrl/api/notifications/v1/send&quot;</span>
+<span class="fc" id="L20">            restTemplate.postForObject(url, notificationRequest, String::class.java)</span>
+<span class="fc" id="L21">        }catch (e: Exception) {</span>
+<span class="fc" id="L22">            throw IntegrationErrorException(&quot;Sending notification request failed&quot;)</span>
         }
-<span class="nc" id="L24">    }</span>
+<span class="fc" id="L24">    }</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

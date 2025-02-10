@@ -1,11 +1,10 @@
 package br.com.soat.uploadapi.core.usecase
 
 import br.com.soat.uploadapi.core.entities.FindStatusVideo
-import br.com.soat.uploadapi.core.exceptions.NotFoundException
-import br.com.soat.uploadapi.core.gateways.IVideoUploadGateway
+import br.com.soat.uploadapi.core.gateways.IVideoGateway
 
 class FindStatusVideoByUserUseCase(
-    private val videoUploadGateway: IVideoUploadGateway
+    private val videoUploadGateway: IVideoGateway
 ) {
 
     fun execute(email: String): MutableList<FindStatusVideo> {

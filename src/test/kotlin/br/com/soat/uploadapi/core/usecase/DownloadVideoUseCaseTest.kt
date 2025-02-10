@@ -1,7 +1,7 @@
 package br.com.soat.uploadapi.core.usecase
 
 import br.com.soat.uploadapi.core.exceptions.NotFoundException
-import br.com.soat.uploadapi.core.gateways.IVideoUploadGateway
+import br.com.soat.uploadapi.core.gateways.IVideoGateway
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.slot
@@ -16,7 +16,7 @@ import java.net.URL
 class DownloadVideoUseCaseTest {
 
     private lateinit var downloadImagesUseCase: DownloadImagesUseCase
-    private lateinit var videoUploadGateway: IVideoUploadGateway
+    private lateinit var videoUploadGateway: IVideoGateway
     private lateinit var presigner: S3Presigner
     private val bucketName = "test-bucket"
 

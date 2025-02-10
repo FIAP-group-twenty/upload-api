@@ -1,7 +1,7 @@
 package br.com.soat.uploadapi.api.config
 
 import br.com.soat.uploadapi.core.gateways.ISendNotificationGateway
-import br.com.soat.uploadapi.core.gateways.IVideoUploadGateway
+import br.com.soat.uploadapi.core.gateways.IVideoGateway
 import br.com.soat.uploadapi.core.usecase.DownloadImagesUseCase
 import br.com.soat.uploadapi.core.usecase.FindStatusVideoByUserUseCase
 import br.com.soat.uploadapi.core.usecase.UpdateVideoUseCase
@@ -15,7 +15,7 @@ import software.amazon.awssdk.services.s3.presigner.S3Presigner
 
 @Configuration
 class BeanConfiguration(
-    private val videoGateway: IVideoUploadGateway,
+    private val videoGateway: IVideoGateway,
     private val s3Client: S3Client,
     private val sqsTemplate: SqsTemplate,
     private val sendNotificationGateway: ISendNotificationGateway,

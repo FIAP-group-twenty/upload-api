@@ -1,11 +1,9 @@
 package br.com.soat.uploadapi.core.usecase
 
 
-import br.com.soat.uploadapi.core.entities.VideoUpload
-import br.com.soat.uploadapi.core.entities.VideoUploadStatus
 import br.com.soat.uploadapi.core.exceptions.ConflictException
 import br.com.soat.uploadapi.core.exceptions.NotFoundException
-import br.com.soat.uploadapi.core.gateways.IVideoUploadGateway
+import br.com.soat.uploadapi.core.gateways.IVideoGateway
 import br.com.soat.uploadapi.infrastructure.persistence.enitites.VideoUploadEntity
 import io.awspring.cloud.sqs.operations.SendResult
 import io.awspring.cloud.sqs.operations.SqsTemplate
@@ -23,13 +21,12 @@ import java.io.ByteArrayInputStream
 import java.io.InputStream
 import java.net.URL
 import java.time.LocalDateTime
-import java.util.concurrent.CompletableFuture
 import kotlin.test.assertEquals
 
 class UploadUseCaseTest{
 
     private lateinit var s3Client: S3Client
-    private lateinit var videoUploadGateway: IVideoUploadGateway
+    private lateinit var videoUploadGateway: IVideoGateway
     private lateinit var sqsTemplate: SqsTemplate
     private lateinit var uploadVideoUseCase: UploadVideoUseCase
 
