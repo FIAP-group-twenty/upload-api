@@ -2,36 +2,51 @@ package br.com.soat.uploadapi.api.config
 
 import io.jsonwebtoken.Claims
 import io.jsonwebtoken.Jwts
-import java.security.KeyFactory
+import jakarta.annotation.PostConstruct
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
-import java.nio.file.Files
-import java.nio.file.Paths
+import java.io.InputStream
+import java.security.KeyFactory
 import java.security.interfaces.RSAPublicKey
+import java.security.spec.X509EncodedKeySpec
 import java.util.*
 
 @Component
-class JwtUtil {
+class JwtUtil(
+    @Value("\${jwt.public-key}") private var publicKeyPath: String
+) {
 
-    private fun loadPublicKey(): RSAPublicKey {
-        val publicKeyPem = String(Files.readAllBytes(Paths.get("/home/lucas/Documentos/publickey.pem")))
 
-        val publicKeyPEM = publicKeyPem
-            .replace("-----BEGIN PUBLIC KEY-----", "")
-            .replace("-----END PUBLIC KEY-----", "").trim()
+    lateinit var publicKey: RSAPublicKey
 
-        val cleanPrivateKey = publicKeyPEM.replace("\\s+".toRegex(), "")
+    @PostConstruct
+    fun init() {
+        try {
+            val resource: InputStream = this.javaClass.classLoader.getResourceAsStream(publicKeyPath)
+                ?: throw IllegalArgumentException("Arquivo de chave pública não encontrado em $publicKeyPath")
 
-        val decoded = Base64.getDecoder().decode(cleanPrivateKey)
-        val keyFactory = KeyFactory.getInstance("RSA")
-        val publicKey: RSAPublicKey = keyFactory.generatePublic(java.security.spec.X509EncodedKeySpec(decoded)) as RSAPublicKey
+            val keyBytes = resource.bufferedReader().readText()
+                .replace("-----BEGIN PUBLIC KEY-----", "")
+                .replace("-----END PUBLIC KEY-----", "")
+                .replace("\n", "")
+                .trim()
 
-        return publicKey
+            val decodedKey = Base64.getDecoder().decode(keyBytes)
+            val keySpec = X509EncodedKeySpec(decodedKey)
+            val keyFactory = KeyFactory.getInstance("RSA")
+            publicKey = keyFactory.generatePublic(keySpec) as RSAPublicKey
+
+            println("Chave pública carregada com sucesso.")
+        } catch (e: Exception) {
+            println("Erro ao carregar chave pública: ${e.message}")
+            e.printStackTrace()
+        }
     }
 
     fun extractClaims(token: String): Claims? {
         return try {
             Jwts.parser()
-                .verifyWith(loadPublicKey())
+                .verifyWith(publicKey)
                 .build()
                 .parseSignedClaims(token)
                 .payload

@@ -24,17 +24,13 @@ import org.springframework.web.multipart.MultipartFile
         @RequestHeader(&quot;Authorization&quot;) authHeader: String,
         @RequestParam(&quot;file&quot;) file: MultipartFile
     ): ResponseEntity&lt;String&gt; {
-//        val token = authHeader.removePrefix(&quot;Bearer &quot;)
-//        val email = jwtUtil.extractEmail(token) ?: throw RuntimeException(&quot;Email is missing&quot;)
-<span class="nc" id="L29">        uploadVideoUseCase.execute(&quot;lucassouzahd@gmail.com&quot;, file)</span>
-<span class="nc" id="L30">        return ResponseEntity.accepted().body(&quot;video ${file.originalFilename} sent for processing&quot;)</span>
+<span class="nc" id="L27">        uploadVideoUseCase.execute(extractEmailFromToken(authHeader), file)</span>
+<span class="nc" id="L28">        return ResponseEntity.accepted().body(&quot;video ${file.originalFilename} sent for processing&quot;)</span>
     }
 
     @GetMapping
     fun findStatusVideoByUser(@RequestHeader(&quot;Authorization&quot;) authHeader: String): ResponseEntity&lt;MutableList&lt;FindStatusVideo&gt;&gt; {
-//        val token = authHeader.removePrefix(&quot;Bearer &quot;)
-//        val email = jwtUtil.extractEmail(token) ?: throw RuntimeException(&quot;Email is missing&quot;)
-<span class="nc" id="L37">        return ResponseEntity.ok(findStatusVideoByUserUseCase.execute(&quot;lucassouzahd@gmail.com&quot;))</span>
+<span class="nc" id="L33">        return ResponseEntity.ok(findStatusVideoByUserUseCase.execute(extractEmailFromToken(authHeader)))</span>
     }
 
     @GetMapping(&quot;download&quot;)
@@ -42,11 +38,17 @@ import org.springframework.web.multipart.MultipartFile
         @RequestHeader(&quot;Authorization&quot;) authHeader: String,
         @RequestParam(&quot;file&quot;) fileName: String
     ): ResponseEntity&lt;VideoUrlDownload&gt; {
-        //val token = authHeader.removePrefix(&quot;Bearer &quot;)
-        //val email = jwtUtil.extractEmail(token) ?: throw RuntimeException(&quot;Email is missing&quot;)
-<span class="nc" id="L47">        return ResponseEntity.ok(</span>
-<span class="nc" id="L48">            VideoUrlDownload(downloadImagesUseCase.execute(&quot;lucassouzahd@gmail.com&quot;, fileName))</span>
+<span class="nc" id="L41">        return ResponseEntity.ok(</span>
+<span class="nc" id="L42">            VideoUrlDownload(downloadImagesUseCase.execute(extractEmailFromToken(authHeader), fileName))</span>
         )
+    }
+
+    private fun extractEmailFromToken(authHeader: String): String {
+<span class="nc" id="L47">        val token = authHeader.removePrefix(&quot;Bearer &quot;).trim()</span>
+<span class="nc bnc" id="L48" title="All 4 branches missed.">        if (token.isNotEmpty()) {</span>
+<span class="nc bnc" id="L49" title="All 2 branches missed.">            return jwtUtil.extractEmail(token) ?: throw IllegalArgumentException(&quot;Email is missing in token&quot;)</span>
+        }
+<span class="nc" id="L51">        throw IllegalArgumentException(&quot;Authorization token is missing or malformed&quot;)</span>
     }
 
 }

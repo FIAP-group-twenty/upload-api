@@ -24,17 +24,13 @@ class VideoController(
         @RequestHeader("Authorization") authHeader: String,
         @RequestParam("file") file: MultipartFile
     ): ResponseEntity<String> {
-//        val token = authHeader.removePrefix("Bearer ")
-//        val email = jwtUtil.extractEmail(token) ?: throw RuntimeException("Email is missing")
-        uploadVideoUseCase.execute("lucassouzahd@gmail.com", file)
+        uploadVideoUseCase.execute(extractEmailFromToken(authHeader), file)
         return ResponseEntity.accepted().body("video ${file.originalFilename} sent for processing")
     }
 
     @GetMapping
     fun findStatusVideoByUser(@RequestHeader("Authorization") authHeader: String): ResponseEntity<MutableList<FindStatusVideo>> {
-//        val token = authHeader.removePrefix("Bearer ")
-//        val email = jwtUtil.extractEmail(token) ?: throw RuntimeException("Email is missing")
-        return ResponseEntity.ok(findStatusVideoByUserUseCase.execute("lucassouzahd@gmail.com"))
+        return ResponseEntity.ok(findStatusVideoByUserUseCase.execute(extractEmailFromToken(authHeader)))
     }
 
     @GetMapping("download")
@@ -42,11 +38,17 @@ class VideoController(
         @RequestHeader("Authorization") authHeader: String,
         @RequestParam("file") fileName: String
     ): ResponseEntity<VideoUrlDownload> {
-        //val token = authHeader.removePrefix("Bearer ")
-        //val email = jwtUtil.extractEmail(token) ?: throw RuntimeException("Email is missing")
         return ResponseEntity.ok(
-            VideoUrlDownload(downloadImagesUseCase.execute("lucassouzahd@gmail.com", fileName))
+            VideoUrlDownload(downloadImagesUseCase.execute(extractEmailFromToken(authHeader), fileName))
         )
+    }
+
+    private fun extractEmailFromToken(authHeader: String): String {
+        val token = authHeader.removePrefix("Bearer ").trim()
+        if (token.isNotEmpty()) {
+            return jwtUtil.extractEmail(token) ?: throw IllegalArgumentException("Email is missing in token")
+        }
+        throw IllegalArgumentException("Authorization token is missing or malformed")
     }
 
 }

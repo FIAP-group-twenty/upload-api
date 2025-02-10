@@ -2,46 +2,61 @@
 
 import io.jsonwebtoken.Claims
 import io.jsonwebtoken.Jwts
-import java.security.KeyFactory
+import jakarta.annotation.PostConstruct
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
-import java.nio.file.Files
-import java.nio.file.Paths
+import java.io.InputStream
+import java.security.KeyFactory
 import java.security.interfaces.RSAPublicKey
+import java.security.spec.X509EncodedKeySpec
 import java.util.*
 
-<span class="nc" id="L12">@Component</span>
-<span class="nc" id="L13">class JwtUtil {</span>
+<span class="nc" id="L14">@Component</span>
+<span class="nc" id="L15">class JwtUtil(</span>
+<span class="nc" id="L16">    @Value(&quot;\${jwt.public-key}&quot;) private var publicKeyPath: String</span>
+) {
 
-    private fun loadPublicKey(): RSAPublicKey {
-<span class="nc" id="L16">        val publicKeyPem = String(Files.readAllBytes(Paths.get(&quot;/home/lucas/Documentos/publickey.pem&quot;)))</span>
 
-<span class="nc" id="L18">        val publicKeyPEM = publicKeyPem</span>
-<span class="nc" id="L19">            .replace(&quot;-----BEGIN PUBLIC KEY-----&quot;, &quot;&quot;)</span>
-<span class="nc" id="L20">            .replace(&quot;-----END PUBLIC KEY-----&quot;, &quot;&quot;).trim()</span>
+<span class="nc bnc" id="L20" title="All 2 branches missed.">    lateinit var publicKey: RSAPublicKey</span>
 
-<span class="nc" id="L22">        val cleanPrivateKey = publicKeyPEM.replace(&quot;\\s+&quot;.toRegex(), &quot;&quot;)</span>
+    @PostConstruct
+    fun init() {
+<span class="nc" id="L24">        try {</span>
+<span class="nc bnc" id="L25" title="All 2 branches missed.">            val resource: InputStream = this.javaClass.classLoader.getResourceAsStream(publicKeyPath)</span>
+<span class="nc" id="L26">                ?: throw IllegalArgumentException(&quot;Arquivo de chave pública não encontrado em $publicKeyPath&quot;)</span>
 
-<span class="nc" id="L24">        val decoded = Base64.getDecoder().decode(cleanPrivateKey)</span>
-<span class="nc" id="L25">        val keyFactory = KeyFactory.getInstance(&quot;RSA&quot;)</span>
-<span class="nc" id="L26">        val publicKey: RSAPublicKey = keyFactory.generatePublic(java.security.spec.X509EncodedKeySpec(decoded)) as RSAPublicKey</span>
+<span class="nc bnc" id="L28" title="All 2 branches missed.">            val keyBytes = resource.bufferedReader().readText()</span>
+<span class="nc" id="L29">                .replace(&quot;-----BEGIN PUBLIC KEY-----&quot;, &quot;&quot;)</span>
+<span class="nc" id="L30">                .replace(&quot;-----END PUBLIC KEY-----&quot;, &quot;&quot;)</span>
+<span class="nc" id="L31">                .replace(&quot;\n&quot;, &quot;&quot;)</span>
+<span class="nc" id="L32">                .trim()</span>
 
-<span class="nc" id="L28">        return publicKey</span>
-    }
+<span class="nc" id="L34">            val decodedKey = Base64.getDecoder().decode(keyBytes)</span>
+<span class="nc" id="L35">            val keySpec = X509EncodedKeySpec(decodedKey)</span>
+<span class="nc" id="L36">            val keyFactory = KeyFactory.getInstance(&quot;RSA&quot;)</span>
+<span class="nc" id="L37">            publicKey = keyFactory.generatePublic(keySpec) as RSAPublicKey</span>
+
+<span class="nc" id="L39">            println(&quot;Chave pública carregada com sucesso.&quot;)</span>
+<span class="nc" id="L40">        } catch (e: Exception) {</span>
+<span class="nc" id="L41">            println(&quot;Erro ao carregar chave pública: ${e.message}&quot;)</span>
+<span class="nc" id="L42">            e.printStackTrace()</span>
+        }
+<span class="nc" id="L44">    }</span>
 
     fun extractClaims(token: String): Claims? {
-<span class="nc" id="L32">        return try {</span>
-<span class="nc" id="L33">            Jwts.parser()</span>
-<span class="nc" id="L34">                .verifyWith(loadPublicKey())</span>
-<span class="nc" id="L35">                .build()</span>
-<span class="nc" id="L36">                .parseSignedClaims(token)</span>
-<span class="nc" id="L37">                .payload</span>
-<span class="nc" id="L38">        }catch (e: Exception){</span>
-<span class="nc" id="L39">            null</span>
+<span class="nc" id="L47">        return try {</span>
+<span class="nc" id="L48">            Jwts.parser()</span>
+<span class="nc" id="L49">                .verifyWith(publicKey)</span>
+<span class="nc" id="L50">                .build()</span>
+<span class="nc" id="L51">                .parseSignedClaims(token)</span>
+<span class="nc" id="L52">                .payload</span>
+<span class="nc" id="L53">        }catch (e: Exception){</span>
+<span class="nc" id="L54">            null</span>
         }
     }
 
     fun extractEmail(token: String): String? {
-<span class="nc bnc" id="L44" title="All 4 branches missed.">       return extractClaims(token)?.subject ?: return null</span>
+<span class="nc bnc" id="L59" title="All 4 branches missed.">       return extractClaims(token)?.subject ?: return null</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

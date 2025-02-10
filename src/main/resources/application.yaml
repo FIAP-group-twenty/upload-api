@@ -33,4 +33,5 @@ aws:
 integrations:
   baseUrl: http://localhost:8081
 
-
+jwt:
+  public-key: public-key.pem
