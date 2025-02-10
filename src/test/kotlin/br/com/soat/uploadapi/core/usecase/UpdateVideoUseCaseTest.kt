@@ -1,10 +1,9 @@
-package br.com.soat.uploadapi
+package br.com.soat.uploadapi.core.usecase
 
 import br.com.soat.uploadapi.core.entities.VideoUpdated
 import br.com.soat.uploadapi.core.exceptions.NotFoundException
 import br.com.soat.uploadapi.core.gateways.ISendNotificationGateway
 import br.com.soat.uploadapi.core.gateways.IVideoUploadGateway
-import br.com.soat.uploadapi.core.usecase.UpdateVideoUseCase
 import br.com.soat.uploadapi.infrastructure.gateway.model.NotificationRequest
 import br.com.soat.uploadapi.infrastructure.persistence.enitites.VideoUploadEntity
 import io.mockk.every

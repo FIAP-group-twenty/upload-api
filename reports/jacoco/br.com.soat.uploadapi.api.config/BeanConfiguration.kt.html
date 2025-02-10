@@ -20,27 +20,29 @@ import software.amazon.awssdk.services.s3.presigner.S3Presigner
 <span class="nc" id="L20">    private val sqsTemplate: SqsTemplate,</span>
 <span class="nc" id="L21">    private val sendNotificationGateway: ISendNotificationGateway,</span>
 <span class="nc" id="L22">    @Value(value = &quot;\${aws.bucketName}&quot;) private var bucketName: String,</span>
-<span class="nc" id="L23">    private val presigner: S3Presigner</span>
+<span class="nc" id="L23">    private val presigner: S3Presigner,</span>
+<span class="nc" id="L24">    @Value(&quot;\${aws.sqs.queue-upload}&quot;) private var queue: String</span>
+
 ) {
 
     @Bean
     fun uploadVideoUseCase(): UploadVideoUseCase{
-<span class="nc" id="L28">        return UploadVideoUseCase(s3Client, videoGateway, sqsTemplate)</span>
+<span class="nc" id="L30">        return UploadVideoUseCase(s3Client, videoGateway, sqsTemplate, bucketName, queue)</span>
     }
 
     @Bean
     fun updateVideoUseCase(): UpdateVideoUseCase {
-<span class="nc" id="L33">        return UpdateVideoUseCase(videoGateway, sendNotificationGateway)</span>
+<span class="nc" id="L35">        return UpdateVideoUseCase(videoGateway, sendNotificationGateway)</span>
     }
 
     @Bean
     fun findStatusVideoByUserUseCase(): FindStatusVideoByUserUseCase {
-<span class="nc" id="L38">        return FindStatusVideoByUserUseCase(videoGateway)</span>
+<span class="nc" id="L40">        return FindStatusVideoByUserUseCase(videoGateway)</span>
     }
 
     @Bean
     fun downloadImagesUseCase(): DownloadImagesUseCase {
-<span class="nc" id="L43">        return DownloadImagesUseCase(videoGateway, bucketName, presigner)</span>
+<span class="nc" id="L45">        return DownloadImagesUseCase(videoGateway, bucketName, presigner)</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

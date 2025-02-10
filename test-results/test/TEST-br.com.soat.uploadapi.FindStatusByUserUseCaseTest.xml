@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="br.com.soat.uploadapi.FindStatusByUserUseCaseTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2025-02-09T23:26:44" hostname="lucas-Dell-G15-5510" time="0.331">
-  <properties/>
-  <testcase name="Deve retornar uma lista vazia caso o usuario nao tenha nenhum upload" classname="br.com.soat.uploadapi.FindStatusByUserUseCaseTest" time="0.322"/>
-  <testcase name="Deve retornar lista de arquivos do usuario" classname="br.com.soat.uploadapi.FindStatusByUserUseCaseTest" time="0.008"/>
-  <system-out><![CDATA[]]></system-out>
-  <system-err><![CDATA[]]></system-err>
-</testsuite>

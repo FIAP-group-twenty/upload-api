@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="br.com.soat.uploadapi.UpdateVideoUseCaseTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2025-02-09T23:26:44" hostname="lucas-Dell-G15-5510" time="0.151">
-  <properties/>
-  <testcase name="should update video status and send notification when video exists()" classname="br.com.soat.uploadapi.UpdateVideoUseCaseTest" time="0.143"/>
-  <testcase name="should throw NotFoundException when video does not exist()" classname="br.com.soat.uploadapi.UpdateVideoUseCaseTest" time="0.007"/>
-  <system-out><![CDATA[]]></system-out>
-  <system-err><![CDATA[]]></system-err>
-</testsuite>

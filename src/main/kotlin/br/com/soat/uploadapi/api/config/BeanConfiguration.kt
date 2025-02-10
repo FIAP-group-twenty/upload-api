@@ -20,12 +20,14 @@ class BeanConfiguration(
     private val sqsTemplate: SqsTemplate,
     private val sendNotificationGateway: ISendNotificationGateway,
     @Value(value = "\${aws.bucketName}") private var bucketName: String,
-    private val presigner: S3Presigner
+    private val presigner: S3Presigner,
+    @Value("\${aws.sqs.queue-upload}") private var queue: String
+
 ) {
 
     @Bean
     fun uploadVideoUseCase(): UploadVideoUseCase{
-        return UploadVideoUseCase(s3Client, videoGateway, sqsTemplate)
+        return UploadVideoUseCase(s3Client, videoGateway, sqsTemplate, bucketName, queue)
     }
 
     @Bean

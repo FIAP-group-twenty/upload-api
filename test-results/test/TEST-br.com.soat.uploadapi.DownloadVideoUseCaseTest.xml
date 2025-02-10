@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="br.com.soat.uploadapi.DownloadVideoUseCaseTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2025-02-09T23:26:38" hostname="lucas-Dell-G15-5510" time="5.943">
-  <properties/>
-  <testcase name="should return presigned URL when file exists()" classname="br.com.soat.uploadapi.DownloadVideoUseCaseTest" time="5.93"/>
-  <testcase name="should throw NotFoundException when file does not exist()" classname="br.com.soat.uploadapi.DownloadVideoUseCaseTest" time="0.01"/>
-  <system-out><![CDATA[]]></system-out>
-  <system-err><![CDATA[]]></system-err>
-</testsuite>
