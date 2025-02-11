@@ -3,19 +3,18 @@ server:
     context-path: /api/upload
 spring:
   datasource:
-    url: jdbc:h2:mem:upload-api
-    driver-class-name: org.h2.Driver
-    username: sa
-    password:
+    url: ${SPRING_DATASOURCE_URL}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${MYSQL_ROOT_PASSWORD}
   jpa:
-    database-platform: org.hibernate.dialect.H2Dialect
+    database-platform: org.hibernate.dialect.MySQL8Dialect
     show-sql: true
     hibernate:
       ddl-auto: update
   h2:
     console:
-      enabled: true
-      path: /h2-console
+      enabled: false
   servlet:
     multipart:
       max-file-size: 300MB
@@ -23,15 +22,15 @@ spring:
 
 aws:
   region: us-east-1
-  bucketName: ${BUCKET_NAME}
+  bucketName: hackathon-bucket-unique-name
   key: ${ACCESS_KEY}
   secret: ${SECRET_KEY}
   sqs:
-    queue-upload: https://sqs.us-east-1.amazonaws.com/438365882822/video-upload
-    queue-update: https://sqs.us-east-1.amazonaws.com/438365882822/video-updated
+    queue-upload: https://sqs.us-east-1.amazonaws.com/438365882822/hackathon-processing-queue-sqs
+    queue-update: https://sqs.us-east-1.amazonaws.com/438365882822/hackathon-finish-queue-sqs
 
 integrations:
-  baseUrl: http://localhost:8081
+  baseUrl: http://172.20.111.104:30004
 
 jwt:
   public-key: public-key.pem
