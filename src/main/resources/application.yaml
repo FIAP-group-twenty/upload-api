@@ -2,5 +2,35 @@ server:
   servlet:
     context-path: /api/upload
 spring:
-  profiles:
-    active: dev
+  datasource:
+    url: ${SPRING_DATASOURCE_URL}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${MYSQL_ROOT_PASSWORD}
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+  h2:
+    console:
+      enabled: false
+  servlet:
+    multipart:
+      max-file-size: 300MB
+      max-request-size: 300MB
+
+aws:
+  region: us-east-1
+  bucketName: hackathon-bucket-unique-name
+  key: ${ACCESS_KEY}
+  secret: ${SECRET_KEY}
+  sqs:
+    queue-upload: https://sqs.us-east-1.amazonaws.com/438365882822/hackathon-processing-queue-sqs
+    queue-update: https://sqs.us-east-1.amazonaws.com/438365882822/hackathon-finish-queue-sqs
+
+integrations:
+  baseUrl: http://172.20.111.104:30004
+
+jwt:
+  public-key: public-key.pem

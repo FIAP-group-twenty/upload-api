@@ -15,11 +15,17 @@ spring:
       path: /h2-console
   servlet:
     multipart:
-      max-file-size: 500MB
-      max-request-size: 500MB
+      max-file-size: 300MB
+      max-request-size: 300MB
 
 aws:
   region: us-east-1
   bucketName: ${BUCKET_NAME}
   key: ${ACCESS_KEY}
   secret: ${SECRET_KEY}
+  sqs:
+    queue-upload: https://sqs.us-east-1.amazonaws.com/438365882822/video-upload
+    queue-update: https://sqs.us-east-1.amazonaws.com/438365882822/video-updated
+
+integrations:
+  baseUrl: http://localhost:8081

@@ -116,3 +116,4 @@ tasks.jacocoTestReport {
         html.outputLocation.set(file("${project.projectDir}/reports/jacoco"))
     }
 }
+

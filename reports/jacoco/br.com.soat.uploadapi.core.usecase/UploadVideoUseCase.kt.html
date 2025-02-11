@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UploadVideoUseCase.kt</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">upload-api</a> &gt; <a href="index.source.html" class="el_package">br.com.soat.uploadapi.core.usecase</a> &gt; <span class="el_source">UploadVideoUseCase.kt</span></div><h1>UploadVideoUseCase.kt</h1><pre class="source lang-java linenums">package br.com.soat.uploadapi.core.usecase
+
+import br.com.soat.uploadapi.core.entities.VideoUpload
+import br.com.soat.uploadapi.core.entities.VideoUploadStatus
+import br.com.soat.uploadapi.core.exceptions.ConflictException
+import br.com.soat.uploadapi.core.exceptions.NotFoundException
+import br.com.soat.uploadapi.core.gateways.IVideoGateway
+import com.fasterxml.jackson.databind.ObjectMapper
+import io.awspring.cloud.sqs.operations.SqsTemplate
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import org.springframework.beans.factory.annotation.Value
+import org.springframework.web.multipart.MultipartFile
+import software.amazon.awssdk.core.sync.RequestBody
+import software.amazon.awssdk.services.s3.S3Client
+import software.amazon.awssdk.services.s3.model.PutObjectRequest
+import java.io.InputStream
+import java.time.LocalDateTime
+
+
+<span class="fc" id="L22">class UploadVideoUseCase(</span>
+<span class="fc" id="L23">    private val s3Client: S3Client,</span>
+<span class="fc" id="L24">    private val videoUploadGateway: IVideoGateway,</span>
+<span class="fc" id="L25">    private val sqsTemplate: SqsTemplate,</span>
+<span class="fc" id="L26">    @Value(value = &quot;\${aws.bucketName}&quot;) private var bucketName: String,</span>
+<span class="fc" id="L27">    @Value(&quot;\${aws.sqs.queue-upload}&quot;) private var queue: String</span>
+) {
+
+    companion object {
+<span class="fc" id="L31">        private val objectMapper = ObjectMapper()</span>
+    }
+
+<span class="fc" id="L34">    private val coroutineScope = CoroutineScope(Dispatchers.Default)</span>
+
+
+    fun execute(email: String, file: MultipartFile) {
+
+<span class="pc bpc" id="L39" title="1 of 2 branches missed.">        val fileName = file.originalFilename ?: email</span>
+<span class="pc bpc" id="L40" title="1 of 2 branches missed.">        val contentType = file.contentType ?: &quot;application/octet-stream&quot;</span>
+
+<span class="fc" id="L42">        val existsFileByUser = videoUploadGateway.findByEmailAndTitle(email, fileName)</span>
+<span class="fc bfc" id="L43" title="All 2 branches covered.">        if (existsFileByUser != null) throw ConflictException(&quot;File already exists&quot;)</span>
+
+<span class="fc" id="L45">        val videoUpload = VideoUpload(</span>
+<span class="fc" id="L46">            email = email,</span>
+<span class="fc" id="L47">            status = VideoUploadStatus.STARTED.name,</span>
+<span class="fc" id="L48">            title = fileName,</span>
+<span class="fc" id="L49">            urlVideo = null</span>
+        )
+
+<span class="fc" id="L52">        videoUploadGateway.uploadVideo(videoUpload)</span>
+
+<span class="pc bpc" id="L54" title="1 of 2 branches missed.">        coroutineScope.launch {</span>
+<span class="pc" id="L55">            runCatching {</span>
+<span class="pc" id="L56">                file.inputStream.use {</span>
+<span class="nc" id="L57">                    uploadedVideo(email, fileName, it, contentType)</span>
+<span class="nc" id="L58">                }</span>
+<span class="pc bpc" id="L59" title="1 of 2 branches missed.">            }.onFailure {</span>
+<span class="fc" id="L60">                val failedVideo = videoUpload.copy(status = VideoUploadStatus.ERROR.name)</span>
+<span class="fc" id="L61">                videoUploadGateway.uploadVideo(failedVideo)</span>
+<span class="fc" id="L62">            }</span>
+<span class="fc" id="L63">        }</span>
+
+<span class="fc" id="L65">    }</span>
+
+    fun uploadedVideo(
+        email: String,
+        fileName: String,
+        file: InputStream,
+        contentType: String
+    ) {
+
+
+<span class="fc" id="L75">        val putObjectRequest = PutObjectRequest.builder()</span>
+<span class="fc" id="L76">            .bucket(bucketName)</span>
+<span class="fc" id="L77">            .key(fileName)</span>
+<span class="fc" id="L78">            .metadata(mapOf(&quot;Content-type&quot; to contentType))</span>
+<span class="fc" id="L79">            .build()</span>
+
+<span class="fc" id="L81">        s3Client.putObject(putObjectRequest, RequestBody.fromInputStream(file, file.available().toLong()))</span>
+
+
+<span class="pc" id="L84">        val videoUrl = s3Client.utilities().getUrl{ it.bucket(bucketName).key(fileName) }.toString()</span>
+
+<span class="fc" id="L86">        val videoUpload = VideoUpload(</span>
+<span class="fc" id="L87">            email = email,</span>
+<span class="fc" id="L88">            status = VideoUploadStatus.STARTED.name,</span>
+<span class="fc" id="L89">            title = fileName,</span>
+<span class="fc" id="L90">            urlVideo = videoUrl</span>
+        )
+
+
+<span class="fc bfc" id="L94" title="All 2 branches covered.">        val findVideo = videoUploadGateway.findByEmailAndTitle(email, fileName)</span>
+<span class="fc" id="L95">            ?: throw NotFoundException(&quot;file does not exists&quot;)</span>
+<span class="fc" id="L96">        findVideo.urlVideo = videoUrl</span>
+<span class="fc" id="L97">        findVideo.updatedAt = LocalDateTime.now()</span>
+<span class="fc" id="L98">        findVideo.status = VideoUploadStatus.IN_PROCESSING.name</span>
+<span class="fc" id="L99">        videoUploadGateway.updatedVideo(findVideo)</span>
+
+<span class="fc" id="L101">        val message = objectMapper.writeValueAsString(videoUpload)</span>
+
+<span class="fc" id="L103">        sqsTemplate.send(queue, message)</span>
+<span class="fc" id="L104">    }</span>
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

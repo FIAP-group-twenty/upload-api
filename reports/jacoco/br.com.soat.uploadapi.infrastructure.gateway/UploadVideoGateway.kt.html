@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UploadVideoGateway.kt</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">upload-api</a> &gt; <a href="index.source.html" class="el_package">br.com.soat.uploadapi.infrastructure.gateway</a> &gt; <span class="el_source">UploadVideoGateway.kt</span></div><h1>UploadVideoGateway.kt</h1><pre class="source lang-java linenums">package br.com.soat.uploadapi.infrastructure.gateway
+
+import br.com.soat.uploadapi.core.entities.VideoUpload
+import br.com.soat.uploadapi.core.gateways.IVideoUploadGateway
+import br.com.soat.uploadapi.infrastructure.persistence.enitites.VideoUploadEntity
+import br.com.soat.uploadapi.infrastructure.persistence.jpa.VideoUploadDataSource
+import org.springframework.stereotype.Repository
+import java.time.LocalDateTime
+
+<span class="nc" id="L10">@Repository</span>
+<span class="nc" id="L11">class UploadVideoGateway(</span>
+<span class="nc" id="L12">    private val videoUploadDataSource: VideoUploadDataSource,</span>
+) : IVideoUploadGateway{
+
+    override fun uploadVideo(upload: VideoUpload) {
+<span class="nc" id="L16">        val entity =   VideoUploadEntity(</span>
+<span class="nc" id="L17">            email = upload.email,</span>
+<span class="nc" id="L18">            title = upload.title,</span>
+<span class="nc" id="L19">            urlVideo = upload.urlVideo,</span>
+<span class="nc" id="L20">            urlZipImages = null,</span>
+<span class="nc" id="L21">            status = upload.status,</span>
+<span class="nc" id="L22">            createdAt = LocalDateTime.now(),</span>
+<span class="nc" id="L23">            updatedAt = LocalDateTime.now()</span>
+        )
+<span class="nc" id="L25">        videoUploadDataSource.save(</span>
+<span class="nc" id="L26">          entity</span>
+        )
+<span class="nc" id="L28">    }</span>
+
+    override fun findByEmailAndTitle(email: String, title: String): VideoUploadEntity? {
+<span class="nc" id="L31">        return videoUploadDataSource.findByEmailAndTitle(email, title)</span>
+    }
+
+    override fun updatedVideo(updated: VideoUploadEntity) {
+<span class="nc" id="L35">        videoUploadDataSource.save(updated)</span>
+<span class="nc" id="L36">    }</span>
+
+    override fun findStatusVideoByUser(email: String): List&lt;VideoUploadEntity?&gt; {
+<span class="nc" id="L39">        return videoUploadDataSource.findByEmail(email)</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
